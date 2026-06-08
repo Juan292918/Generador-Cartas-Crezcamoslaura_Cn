@@ -501,30 +501,33 @@
                     <p>No obstante a lo anterior, nuestra entidad mantiene la disposición de revisar su situación financiera actual con el fin de evaluar la posibilidad de estructurar un nuevo acuerdo para <strong>${pag}</strong> que le permita normalizar su obligación y evitar mayores consecuencias procesales.</p>`;
                 }
             },
-            function cambiarEstructuraFormulario() {
-            const tipo = document.getElementById('selTipo').value;
-            // Añadidas las dos nuevas secciones a la lista para limpiarlas
-            const secciones = ['seccionVehiculo', 'seccionMercantil', 'seccionSalarial', 'seccionBancario', 'seccionAcuerdo', 'seccionCancelacionAcuerdo', 'seccionTramiteJuridico'];
-            secciones.forEach(s => {
-                const el = document.getElementById(s);
-                if (el) el.style.display = 'none';
-            });
-            
-            if (tipo === 'vehicular') document.getElementById('seccionVehiculo').style.display = 'block';
-            if (tipo === 'mercantil') document.getElementById('seccionMercantil').style.display = 'block';
-            if (tipo === 'salarial') document.getElementById('seccionSalarial').style.display = 'block';
-            if (tipo === 'bancario') document.getElementById('seccionBancario').style.display = 'block';
-            if (tipo === 'acuerdo') document.getElementById('seccionAcuerdo').style.display = 'block';
-            // Activación de las nuevas secciones en la interfaz
-            if (tipo === 'cancelacion_acuerdo' && document.getElementById('seccionCancelacionAcuerdo')) document.getElementById('seccionCancelacionAcuerdo').style.display = 'block';
-            if (tipo === 'tramite_juridico' && document.getElementById('seccionTramiteJuridico')) document.getElementById('seccionTramiteJuridico').style.display = 'block';
+            // =================================================================
+            // INTEGRACIÓN NUEVA: NOTIFICACIÓN TRÁMITE JURÍDICO
+            // =================================================================
+            tramite_juridico: {
+                titulo: "NOTIFICACIÓN DE GESTIÓN JURÍDICA Y POSIBLES MEDIDAS CAUTELARES",
+                destinatario: (n, c) => {
+                    const dir = document.getElementById('jDireccion').value || '_______';
+                    return `Señor(es):<br><strong>${n.toUpperCase()}</strong><br>${dir.toUpperCase()}`;
+                },
+                cuerpo: () => {
+                    const ban = document.getElementById('jBancos').value || 'BBVA, BANCOLOMBIA, BANCO BOGOTÁ, BANCO AV VILLAS, BANCO AGRARIO, BANCO DAVIVIENDA, BANCO POPULAR, NEQUI, DAVIPLATA';
+                    const neq = document.getElementById('jCuentaNequi').value || '_______';
+                    const juz = document.getElementById('jJuzgado').value || '____________________';
+                    const rad = document.getElementById('jRadicado').value || '_______';
 
-            // El pie de página de bancos también se activa para las nuevas opciones
-            const pieBancos = document.getElementById('lblPieBancos');
-            if (pieBancos) {
-                pieBancos.style.display = (tipo === 'bancario' || tipo === 'acuerdo' || tipo === 'cancelacion_acuerdo' || tipo === 'tramite_juridico') ? 'block' : 'none';
+                    return `<p>Nos permitimos notificarle formalmente que, en relación al crédito en mora con <strong>CREZCAMOS</strong>, y conforme a lo dispuesto en el <strong>Art. 422 del CGP</strong>, nos encontramos tramitando el embargo de congelamiento de sus cuentas bancarias <strong>(${ban})</strong>, esto como medida para asegurar el cumplimiento de sus obligaciones financieras pendientes.</p>
+                    <p>Teniendo en cuenta lo que se indica a continuación:</p>
+                    <ul style="padding-left: 20px; line-height: 1.6;">
+                        <li>Realizaremos la notificación formal a su empleador, con el fin de que tramite el correspondiente descuento a nómina por parte del pagador encargado.</li>
+                        <li>Embargo y secuestro de bienes muebles o establecimiento de comercio.</li>
+                        <li>Las cuentas bancarias a su nombre serán congeladas en su totalidad, lo que le imposibilitara realizar transacciones o retiros de los dineros que ingresen en estas.</li>
+                    </ul>
+                    <p><strong>CUENTA NEQUI:</strong> Cuenta de ahorro No. <strong>${neq}</strong></p>
+                    <p>En virtud de lo anterior, nos permitimos informarle que se dará continuidad al proceso que se solicitara en el <strong>${juz}</strong>, bajo el <strong>RAD. ${rad}</strong> Interno de la entidad, esta notificación tiene el propósito de informarle de manera clara y directo la situación actual; y se tramitarán las medidas, hasta que se resuelva la situación que dio origen a esta acción. Le recomendamos tomar contacto inmediato para obtener mayor información y si lo considera pertinente, gestionar un posible acuerdo o solución.</p>`;
+                }
             }
-        }
+        };
 
 
         function cambiarEstructuraFormulario() {
